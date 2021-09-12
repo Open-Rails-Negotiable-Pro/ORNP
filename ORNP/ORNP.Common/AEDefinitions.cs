@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2013, 2014 by the Open Rails project.
+﻿// COPYRIGHT 2014, 2015 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -19,12 +19,12 @@
 // 
 // This file is part of Open Rails Negotiable Pro Client.
 // 
-// Open Rails is free software: you can redistribute it and/or modify
+// ORNP is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 // 
-// Open Rails is distributed in the hope that it will be useful,
+// ORNP is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
@@ -32,38 +32,40 @@
 // You should have received a copy of the GNU General Public License
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Linq;
 
 namespace ORNP.Common
 {
     /// <summary>
-    /// Localization attribute for decorating enums
+    /// List of items that can be shown through the Editor.  These items can be searchable, modifiable, movable, ...
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public class GetStringAttribute : Attribute
+    public enum TypeItem
     {
-        public string Name { get; protected set; }
-        public GetStringAttribute(string name) { Name = name; }
+        GLOBAL_ITEM = 0,
+        SIGNAL_ITEM = 1,
+        SWITCH_ITEM = 2,
+        TAG_ITEM = 3,
+        BUFFER_ITEM = 4,
+        SIDING_START = 5,
+        STATION_ITEM = 6,
+        STATION_AREA_ITEM = 7,
+        STATION_CONNECTOR = 8,
+        ACTIVITY_ITEM = 9,
+        SIDING_END = 10,
+        CROSS_OVER = 11
+    };
 
-        public static string GetPrettyName(Enum value)
-        {
-            var type = value.GetType();
-            return type.GetField(Enum.GetName(type, value))
-                .GetCustomAttributes(false)
-                .OfType<GetStringAttribute>()
-                .SingleOrDefault()
-                .Name;
-        }
-    }
-
-    /// <summary>
-    /// Localization attribute for decorating enums
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public class GetParticularStringAttribute : GetStringAttribute
+    public enum TypeSiding
     {
-        public string Context { get; protected set; }
-        public GetParticularStringAttribute(string context, string name) : base(name) { Context = context; }
-    }
+        SIDING_START = 0,
+        SIDING_END = 1,
+        PLATFORM_START = 2,
+        PLATFORM_END = 3
+    };
+    public enum TypeEditor
+    {
+        ACTIVITY = 1,
+        ROUTECONFIG = 2,
+        TRAFFIC = 3,
+        NONE = 0
+    };
 }
