@@ -1,4 +1,0 @@
-﻿
-namespace ORNP.Skia.Gtk
-{
-}
