@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{6FA93207-D494-49E1-BBAB-E77EC96FD781}</ProjectGuid>
+    <ProjectGuid>{BE571299-AB6C-4114-9EBF-80CCD887878E}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ornp</RootNamespace>
-    <AssemblyName>ORMainProgrm</AssemblyName>
+    <RootNamespace>ORTS</RootNamespace>
+    <AssemblyName>Launcher</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
@@ -150,23 +150,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EmbedIO">
-      <Version>3.4.3</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.12</Version>
     </PackageReference>
-    <PackageReference Include="MonoGame.Framework.DesktopGL">
-      <Version>3.8.0.1641</Version>
-    </PackageReference>
-    <PackageReference Include="RailDriver">
-      <Version>0.7.10</Version>
-    </PackageReference>
-    <PackageReference Include="System.ValueTuple">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Unosquare.Swan">
-      <Version>3.0.0</Version>
+    <PackageReference Include="ReactiveUI">
+      <Version>16.2.6</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
