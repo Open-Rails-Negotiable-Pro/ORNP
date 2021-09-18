@@ -7,7 +7,7 @@
     <ProjectGuid>{BE571299-AB6C-4114-9EBF-80CCD887878E}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ORTS</RootNamespace>
+    <RootNamespace>ORNP</RootNamespace>
     <AssemblyName>Launcher</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
