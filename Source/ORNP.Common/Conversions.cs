@@ -38,7 +38,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Globalization;
-using GNU.Gettext;
+using NGettext;
 
 namespace ORNP.Common
 {
@@ -549,7 +549,7 @@ namespace ORNP.Common
     /// </summary>
     public static class FormatStrings
     {
-        public static GettextResourceManager Catalog = new GettextResourceManager("ORTS.Common");
+        public static ICatalog Catalog = new Catalog("ORNP.Common", "./locale");
         public static string m = Catalog.GetString("m");
         public static string km = Catalog.GetString("km");
         public static string mm = Catalog.GetString("mm");

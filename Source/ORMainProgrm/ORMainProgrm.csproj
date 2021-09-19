@@ -159,6 +159,9 @@
     <PackageReference Include="MonoGame.Framework.DesktopGL">
       <Version>3.8.0.1641</Version>
     </PackageReference>
+    <PackageReference Include="MonoGame.Framework.WindowsUniversal">
+      <Version>3.8.0.1641</Version>
+    </PackageReference>
     <PackageReference Include="RailDriver">
       <Version>0.7.10</Version>
     </PackageReference>
