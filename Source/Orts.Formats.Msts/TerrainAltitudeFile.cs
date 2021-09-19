@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2009, 2011 by the Open Rails project.
+﻿// COPYRIGHT 2009, 2010, 2013 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -33,46 +33,40 @@
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.IO;
 
-namespace ORNP.Common
+namespace Ornp.Formats.Msts
 {
-    public enum Direction
+    public class TerrainAltitudeFile
     {
-        [GetParticularString("Reverser", "Forward")] Forward,
-        [GetParticularString("Reverser", "Reverse")] Reverse,
-        [GetParticularString("Reverser", "N")] N
-    }
+        readonly ushort[,] Elevation;
 
-    public class DirectionControl
-    {
-        public static Direction Flip(Direction direction)
+        public TerrainAltitudeFile(string fileName, int sampleCount)
         {
-            //return direction == Direction.Forward ? Direction.Reverse : Direction.Forward;
-            if (direction == Direction.N)
-                return Direction.N;
-            if (direction == Direction.Forward)
-                return Direction.Reverse;
-            else
-                return Direction.Forward;
+            Elevation = new ushort[sampleCount, sampleCount];
+            try
+            {
+                using (var reader = new BinaryReader(File.OpenRead(fileName)))
+                    for (var z = 0; z < sampleCount; z++)
+                        for (var x = 0; x < sampleCount; x++)
+                            Elevation[x, z] = reader.ReadUInt16();
+            }
+            catch (Exception error)
+            {
+                Trace.WriteLine(new FileLoadException(fileName, error));
+            }
         }
-    }
-
-    /// <summary>
-    /// A type of horn pattern used by AI trains at level crossings.
-    /// </summary>
-    public enum LevelCrossingHornPattern
-    {
-        /// <summary>
-        /// A single blast just before the crossing.
-        /// </summary>
-        Single,
 
         /// <summary>
-        /// A long-long-short-long pattern used in the United States and Canada.
+        /// Returns the elevation at a specific sample point.
         /// </summary>
-        US,
+        /// <param name="x">X coordinate; starts at west side, increases easterly.</param>
+        /// <param name="z">Z coordinate; starts at north side, increases southerly.</param>
+        /// <returns>Elevation relative to the tile's floor and scaled by resolution.</returns>
+        public ushort GetElevation(int x, int z)
+        {
+            return Elevation[x, z];
+        }
     }
 }

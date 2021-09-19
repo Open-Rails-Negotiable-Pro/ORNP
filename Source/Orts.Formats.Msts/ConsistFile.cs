@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2009, 2011 by the Open Rails project.
+﻿// COPYRIGHT 2009, 2010, 2011, 2013 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -33,46 +33,32 @@
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections;
+using System.IO;
+using Ornp.Parsers.Msts;
 
-namespace ORNP.Common
+namespace Ornp.Formats.Msts
 {
-    public enum Direction
-    {
-        [GetParticularString("Reverser", "Forward")] Forward,
-        [GetParticularString("Reverser", "Reverse")] Reverse,
-        [GetParticularString("Reverser", "N")] N
-    }
-
-    public class DirectionControl
-    {
-        public static Direction Flip(Direction direction)
-        {
-            //return direction == Direction.Forward ? Direction.Reverse : Direction.Forward;
-            if (direction == Direction.N)
-                return Direction.N;
-            if (direction == Direction.Forward)
-                return Direction.Reverse;
-            else
-                return Direction.Forward;
-        }
-    }
-
     /// <summary>
-    /// A type of horn pattern used by AI trains at level crossings.
+    /// Work with consist files
     /// </summary>
-    public enum LevelCrossingHornPattern
+    public class ConsistFile
     {
-        /// <summary>
-        /// A single blast just before the crossing.
-        /// </summary>
-        Single,
+        public string Name; // from the Name field or label field of the consist file
+        public Train_Config Train;
 
-        /// <summary>
-        /// A long-long-short-long pattern used in the United States and Canada.
-        /// </summary>
-        US,
+        public ConsistFile(string filePath)
+        {
+            using (var stf = new STFReader(filePath, false))
+                stf.ParseFile(new STFReader.TokenProcessor[] {
+                    new STFReader.TokenProcessor("train", ()=>{ Train = new Train_Config(stf); }),
+                });
+            Name = Train.TrainCfg.Name;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
