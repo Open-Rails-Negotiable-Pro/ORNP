@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2010 by the Open Rails project.
+﻿//// COPYRIGHT 2020 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -32,50 +32,38 @@
 // You should have received a copy of the GNU General Public License
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
+using ORNP.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace ORNP.Common
+namespace ORNP.Scripting.Api
 {
-	/// <summary>
-	/// Explicitly sets the name of the thread on which the target will run.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-	public sealed class ThreadNameAttribute : Attribute
-	{
-		readonly string threadName;
+    /// <summary>
+    /// Traction cut-off relay for diesel locomotives
+    /// </summary>
+    public abstract class TractionCutOffRelay : TractionCutOffSubsystem
+    {
+        /// <summary>
+        /// Current state of the circuit breaker
+        /// </summary>
+        public Func<TractionCutOffRelayState> CurrentState;
 
-		// This is a positional argument
-		public ThreadNameAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
+        /// <summary>
+        /// Sets the current state of the circuit breaker
+        /// </summary>
+        public Action<TractionCutOffRelayState> SetCurrentState;
 
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+        /// <summary>
+        /// Current state of the circuit breaker
+        /// Only available on dual mode locomotives
+        /// </summary>
+        public Func<CircuitBreakerState> CurrentCircuitBreakerState;
+    }
 
-	/// <summary>
-	/// Defines a thread on which the target is allowed to run; multiple threads may be allowed for a single target.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-	public sealed class CallOnThreadAttribute : Attribute
-	{
-		readonly string threadName;
-
-		// This is a positional argument
-		public CallOnThreadAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
-
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+    public enum TractionCutOffRelayState
+    {
+        [GetString("Unavailable")] Unavailable,
+        [GetParticularString("TractionCutOffRelay", "Open")] Open,
+        [GetParticularString("TractionCutOffRelay", "Closing")] Closing,
+        [GetParticularString("TractionCutOffRelay", "Closed")] Closed
+    }
 }

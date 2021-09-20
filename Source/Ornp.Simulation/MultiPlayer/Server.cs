@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2010 by the Open Rails project.
+﻿// COPYRIGHT 2012 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -32,50 +32,74 @@
 // You should have received a copy of the GNU General Public License
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
+// #define DEBUG_MULTIPLAYER
+// DEBUG flag for debug prints
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 
-namespace ORNP.Common
+namespace Ornp.MultiPlayer
 {
-	/// <summary>
-	/// Explicitly sets the name of the thread on which the target will run.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-	public sealed class ThreadNameAttribute : Attribute
+	public class Server
 	{
-		readonly string threadName;
+		public List<OnlinePlayer> Players;
+		public string UserName;
+		public string Code;
+		ClientComm Connection;
+		public ServerComm ServerComm;
+		public int ConnectionMode;
 
-		// This is a positional argument
-		public ThreadNameAttribute(string threadName)
+		public void Stop()
 		{
-			this.threadName = threadName;
+			if (ServerComm != null) ServerComm.Stop();
+			if (Connection != null) Connection.Stop();
+		}
+		public Server(string s, ClientComm c)
+		{
+			Players = new List<OnlinePlayer>();
+			string[] tmp = s.Split(' ');
+			UserName = tmp[0];
+			Code = tmp[1];
+			Connection = c;
+			ServerComm = null;
+			ConnectionMode = 0;
 		}
 
-		public string ThreadName
+		public bool IsRemoteServer()
 		{
-			get { return threadName; }
+			if (ConnectionMode == 0) return true;
+			else return false;
 		}
-	}
-
-	/// <summary>
-	/// Defines a thread on which the target is allowed to run; multiple threads may be allowed for a single target.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-	public sealed class CallOnThreadAttribute : Attribute
-	{
-		readonly string threadName;
-
-		// This is a positional argument
-		public CallOnThreadAttribute(string threadName)
+		public Server(string s, int port)
 		{
-			this.threadName = threadName;
+			Players = new List<OnlinePlayer>();
+			string[] tmp = s.Split(' ');
+			UserName = tmp[0];
+			Code = tmp[1];
+
+			ServerComm = new ServerComm(this, port);
+			Connection = null;
+			ConnectionMode = 1;
 		}
 
-		public string ThreadName
+		public void BroadCast(string msg)
 		{
-			get { return threadName; }
+#if DEBUG_MULTIPLAYER
+                    Trace.TraceInformation("MPServerBroadcast: {0}", msg);
+#endif
+			if (ServerComm == null) Connection.Send(msg);
+			else
+			{
+				try
+				{
+					foreach (OnlinePlayer p in Players)
+					{
+						p.Send(msg);
+					}
+				}
+				catch (Exception) { }
+			}
 		}
 	}
 }

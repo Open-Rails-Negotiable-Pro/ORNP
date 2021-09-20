@@ -32,50 +32,45 @@
 // You should have received a copy of the GNU General Public License
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Ornp.Parsers.Msts;
+using System.IO;
 
-namespace ORNP.Common
+namespace Ornp.Simulation.RollingStocks.SubSystems.Controllers
 {
-	/// <summary>
-	/// Explicitly sets the name of the thread on which the target will run.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-	public sealed class ThreadNameAttribute : Attribute
-	{
-		readonly string threadName;
+    /**
+     * This interface is used to specify how controls will work.
+     * 
+     * We have a class for implementing each type of controller that locomotives use, being the commons
+     * the Notched and not Notched controller.          
+     * 
+     */
+    public interface IController
+    {
+        float Update(float elapsedSeconds);
 
-		// This is a positional argument
-		public ThreadNameAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
+        void StartIncrease();
+        void StopIncrease();
+        void StartDecrease();
+        void StopDecrease();
+        void StartIncrease(float? target);
+        void StartDecrease(float? target, bool toZero = false);
+        float SetPercent(float percent);
 
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+        float UpdateValue { get; set; }
+        float CurrentValue { get; set; }
+        int CurrentNotch { get; set; }
+        double CommandStartTime { get; set; }
+        int SetValue(float value);
 
-	/// <summary>
-	/// Defines a thread on which the target is allowed to run; multiple threads may be allowed for a single target.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-	public sealed class CallOnThreadAttribute : Attribute
-	{
-		readonly string threadName;
+        //Loads the controller from a stream
+        void Parse(STFReader stf);
 
-		// This is a positional argument
-		public CallOnThreadAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
+        //returns true if this controller was loaded and can be used
+        //Some notched controllers will have stepSize == 0, those are invalid
+        bool IsValid();
 
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+        string GetStatus();
+
+        void Save(BinaryWriter outf);
+    }
 }

@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2010 by the Open Rails project.
+﻿// COPYRIGHT 2009, 2010, 2011, 2012, 2013, 2014 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -32,50 +32,29 @@
 // You should have received a copy of the GNU General Public License
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace ORNP.Common
+namespace Ornp.Simulation.RollingStocks.SubSystems.Brakes.MSTS
 {
-	/// <summary>
-	/// Explicitly sets the name of the thread on which the target will run.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-	public sealed class ThreadNameAttribute : Attribute
-	{
-		readonly string threadName;
+    public class AirTwinPipe : AirSinglePipe
+    {
+        public AirTwinPipe(TrainCar car)
+            : base(car)
+        {
+            TwoPipes = true;
+            DebugType = "2P";
+            (Car as MSTSWagon).DistributorPresent = true;
+            (Car as MSTSWagon).EmergencyReservoirPresent = false;
+        }
 
-		// This is a positional argument
-		public ThreadNameAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
-
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
-
-	/// <summary>
-	/// Defines a thread on which the target is allowed to run; multiple threads may be allowed for a single target.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-	public sealed class CallOnThreadAttribute : Attribute
-	{
-		readonly string threadName;
-
-		// This is a positional argument
-		public CallOnThreadAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
-
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+        public override void UpdateTripleValveState(float controlPressurePSI)
+        {
+            if (controlPressurePSI < AutoCylPressurePSI - (TripleValveState != ValveState.Release ? 2.2f : 0f)
+                || controlPressurePSI < 2.2f) // The latter is a UIC regulation (0.15 bar)
+                TripleValveState = ValveState.Release;
+            else if (!BailOffOn && controlPressurePSI > AutoCylPressurePSI + (TripleValveState != ValveState.Apply ? 2.2f : 0f))
+                TripleValveState = ValveState.Apply;
+            else
+                TripleValveState = ValveState.Lap;
+        }
+    }
 }

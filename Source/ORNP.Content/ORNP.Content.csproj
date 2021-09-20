@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
-    <RootNamespace>ORNP.IO</RootNamespace>
+    <RootNamespace>ORNP.Content</RootNamespace>
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <UseWinUI>true</UseWinUI>
     <Platforms>AnyCPU;x64</Platforms>
@@ -12,6 +12,6 @@
       <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.3" />
       <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.3" />
       <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.3" />
-      <PackageReference Include="System.Management" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
   </ItemGroup>
 </Project>

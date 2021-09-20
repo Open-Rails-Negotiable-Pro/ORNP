@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2010 by the Open Rails project.
+﻿// COPYRIGHT 2020 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -32,50 +32,31 @@
 // You should have received a copy of the GNU General Public License
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using ORNP.Scripting.Api;
 
-namespace ORNP.Common
+namespace Ornp.Simulation.RollingStocks.SubSystems.PowerSupplies
 {
-	/// <summary>
-	/// Explicitly sets the name of the thread on which the target will run.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-	public sealed class ThreadNameAttribute : Attribute
-	{
-		readonly string threadName;
+    /// <summary>
+    /// Base interface for any kind of line electric power supply via catenary, third rail, etc.
+    /// </summary>
+    public interface IPowerSupply : ISubSystem<IPowerSupply>, IParsable
+    {
+        BatterySwitch BatterySwitch { get; }
 
-		// This is a positional argument
-		public ThreadNameAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
+        PowerSupplyState ElectricTrainSupplyState { get; }
+        bool ElectricTrainSupplyOn { get; }
+        bool FrontElectricTrainSupplyCableConnected { get; set; }
+        float ElectricTrainSupplyPowerW { get; }
 
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+        PowerSupplyState LowVoltagePowerSupplyState { get; }
+        bool LowVoltagePowerSupplyOn { get; }
 
-	/// <summary>
-	/// Defines a thread on which the target is allowed to run; multiple threads may be allowed for a single target.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-	public sealed class CallOnThreadAttribute : Attribute
-	{
-		readonly string threadName;
+        PowerSupplyState BatteryState { get; }
+        bool BatteryOn { get; }
 
-		// This is a positional argument
-		public CallOnThreadAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
-
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+        void HandleEvent(PowerSupplyEvent evt);
+        void HandleEvent(PowerSupplyEvent evt, int id);
+        void HandleEventFromLeadLocomotive(PowerSupplyEvent evt);
+        void HandleEventFromLeadLocomotive(PowerSupplyEvent evt, int id);
+    }
 }

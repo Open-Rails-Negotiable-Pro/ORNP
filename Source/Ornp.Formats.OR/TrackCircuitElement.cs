@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2010 by the Open Rails project.
+﻿// COPYRIGHT 2014, 2015 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -32,50 +32,37 @@
 // You should have received a copy of the GNU General Public License
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using ORNP.Common;
 
-namespace ORNP.Common
+namespace Ornp.Formats.OR
 {
-	/// <summary>
-	/// Explicitly sets the name of the thread on which the target will run.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-	public sealed class ThreadNameAttribute : Attribute
-	{
-		readonly string threadName;
+    public class TrackCircuitElement
+    {
+        protected TypeItem info;
+        public float ElementLocation;
+        public GlobalItem refItem;
+        public TrackCircuitElement(GlobalItem item, float position)
+        {
+            refItem = item;
+            ElementLocation = position;
+        }
+    }
 
-		// This is a positional argument
-		public ThreadNameAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
+    public class TrackCircuitElementConnector : TrackCircuitElement
+    {
+        public TrackCircuitElementConnector(GlobalItem item, float position)
+            : base(item, position)
+        {
+            info = TypeItem.STATION_CONNECTOR;
+        }
+    }
 
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
-
-	/// <summary>
-	/// Defines a thread on which the target is allowed to run; multiple threads may be allowed for a single target.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-	public sealed class CallOnThreadAttribute : Attribute
-	{
-		readonly string threadName;
-
-		// This is a positional argument
-		public CallOnThreadAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
-
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+    public class TrackCircuitElementPlatform : TrackCircuitElement
+    {
+        public TrackCircuitElementPlatform(GlobalItem item, float position)
+            : base(item, position)
+        {
+            info = TypeItem.SIDING_START;
+        }
+    }
 }
