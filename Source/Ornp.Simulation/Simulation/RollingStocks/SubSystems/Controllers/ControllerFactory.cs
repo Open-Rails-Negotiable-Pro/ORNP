@@ -32,50 +32,46 @@
 // You should have received a copy of the GNU General Public License
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 
-namespace ORNP.Common
+namespace Ornp.Simulation.RollingStocks.SubSystems.Controllers
 {
-	/// <summary>
-	/// Explicitly sets the name of the thread on which the target will run.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-	public sealed class ThreadNameAttribute : Attribute
-	{
-		readonly string threadName;
+    public enum ControllerTypes
+    {
+        MSTSNotchController = 1,
+        BrakeController
+    }
 
-		// This is a positional argument
-		public ThreadNameAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
+    public class ControllerFactory
+    {
+        public static void Save(IController controller, BinaryWriter outf)
+        {
+            outf.Write(controller != null);
 
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+            if (controller != null)
+                controller.Save(outf);
+        }
 
-	/// <summary>
-	/// Defines a thread on which the target is allowed to run; multiple threads may be allowed for a single target.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-	public sealed class CallOnThreadAttribute : Attribute
-	{
-		readonly string threadName;
+        public static void Restore(IController controller, BinaryReader inf)
+        {
+            if (!inf.ReadBoolean())
+                return;
 
-		// This is a positional argument
-		public CallOnThreadAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
+            switch ((ControllerTypes)inf.ReadInt32())
+            {
+                case ControllerTypes.MSTSNotchController:
+                    if (controller == null)
+                        controller = new MSTSNotchController();
+                    ((MSTSNotchController)controller).Restore(inf);
+                    break;
 
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+                case ControllerTypes.BrakeController:
+                    ((ScriptedBrakeController)controller).Restore(inf);
+                    break;
+
+                default:
+                    throw new InvalidDataException("Invalid controller type");
+            }
+        }
+    }
 }

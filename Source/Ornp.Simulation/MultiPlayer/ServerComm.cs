@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2010 by the Open Rails project.
+﻿// COPYRIGHT 2012 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -33,49 +33,62 @@
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
 
-namespace ORNP.Common
+namespace Ornp.MultiPlayer
 {
-	/// <summary>
-	/// Explicitly sets the name of the thread on which the target will run.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-	public sealed class ThreadNameAttribute : Attribute
+	public class ServerComm
 	{
-		readonly string threadName;
-
-		// This is a positional argument
-		public ThreadNameAttribute(string threadName)
+		private TcpListener tcpListener;
+		private Thread listenThread;
+		private Server Server;
+		private int count = 0;
+		public void Stop()
 		{
-			this.threadName = threadName;
+			tcpListener.Stop();
+			listenThread.Abort();
+			foreach (OnlinePlayer p in Server.Players)
+			{
+				p.thread.Abort();
+			}
 		}
 
-		public string ThreadName
+		public ServerComm(Server s, int port)
 		{
-			get { return threadName; }
-		}
-	}
-
-	/// <summary>
-	/// Defines a thread on which the target is allowed to run; multiple threads may be allowed for a single target.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-	public sealed class CallOnThreadAttribute : Attribute
-	{
-		readonly string threadName;
-
-		// This is a positional argument
-		public CallOnThreadAttribute(string threadName)
-		{
-			this.threadName = threadName;
+			Server = s;
+			this.tcpListener = new TcpListener(IPAddress.Any, port);
+			this.listenThread = new Thread(new ThreadStart(ListenForClients));
+			this.listenThread.Name = "Multiplayer Server";
+			this.listenThread.Start();
 		}
 
-		public string ThreadName
+		private void ListenForClients()
 		{
-			get { return threadName; }
+			this.tcpListener.Start();
+
+			while (true)
+			{
+				TcpClient client = null;
+				try
+				{
+					//blocks until a client has connected to the server
+					client = this.tcpListener.AcceptTcpClient();
+				}
+				catch (Exception) { break; }
+				count++;
+				OnlinePlayer player = new OnlinePlayer(client, Server);
+				Server.Players.Add(player);
+				System.Console.WriteLine("New Player Joined");
+
+				//create a thread to handle communication
+				//with connected client
+				Thread clientThread = new Thread(new ParameterizedThreadStart(player.Receive));
+				clientThread.Name = "Multiplayer Server-Client";// +count;
+				player.thread = clientThread;
+				clientThread.Start(client);
+			}
 		}
 	}
 }

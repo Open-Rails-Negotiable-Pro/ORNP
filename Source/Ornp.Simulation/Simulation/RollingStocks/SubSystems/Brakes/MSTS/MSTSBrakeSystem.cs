@@ -1,4 +1,4 @@
-﻿// COPYRIGHT 2010 by the Open Rails project.
+﻿// COPYRIGHT 2009, 2010, 2011, 2012, 2013, 2014 by the Open Rails project.
 // 
 // This file is part of Open Rails.
 // 
@@ -32,50 +32,35 @@
 // You should have received a copy of the GNU General Public License
 // along with ORNP.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Ornp.Parsers.Msts;
 
-namespace ORNP.Common
+namespace Ornp.Simulation.RollingStocks.SubSystems.Brakes.MSTS
 {
-	/// <summary>
-	/// Explicitly sets the name of the thread on which the target will run.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-	public sealed class ThreadNameAttribute : Attribute
-	{
-		readonly string threadName;
+    public abstract class MSTSBrakeSystem : BrakeSystem
+    {
+        public static BrakeSystem Create(string type, TrainCar car)
+        {
+            switch (type)
+            {
+                case "manual_braking": return new ManualBraking(car);
+                case "straight_vacuum_single_pipe": return new StraightVacuumSinglePipe(car);
+                case "vacuum_twin_pipe":
+                case "vacuum_single_pipe": return new VacuumSinglePipe(car);
+                case "air_twin_pipe": return new AirTwinPipe(car);
+                case "air_single_pipe": return new AirSinglePipe(car);
+                case "ecp":
+                case "ep": return new EPBrakeSystem(car);
+                case "sme": return new SMEBrakeSystem(car);
+                case "air_piped":
+                case "vacuum_piped": return new SingleTransferPipe(car);
+                default: return new SingleTransferPipe(car);
+            }
+        }
 
-		// This is a positional argument
-		public ThreadNameAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
+        public abstract void Parse(string lowercasetoken, STFReader stf);
 
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+        public abstract void Update(float elapsedClockSeconds);
 
-	/// <summary>
-	/// Defines a thread on which the target is allowed to run; multiple threads may be allowed for a single target.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-	public sealed class CallOnThreadAttribute : Attribute
-	{
-		readonly string threadName;
-
-		// This is a positional argument
-		public CallOnThreadAttribute(string threadName)
-		{
-			this.threadName = threadName;
-		}
-
-		public string ThreadName
-		{
-			get { return threadName; }
-		}
-	}
+        public abstract void InitializeFromCopy(BrakeSystem copy);
+    }
 }
