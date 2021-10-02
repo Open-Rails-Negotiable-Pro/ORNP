@@ -851,7 +851,7 @@ namespace Ornp.Formats.Msts
         }
     }
 
-    public enum ORTSActSoundFileTypes
+    public enum ORNPActSoundFileTypes
     {
         None,
         Everywhere,
@@ -873,10 +873,10 @@ namespace Ornp.Formats.Msts
         public string TextToDisplayOnCompletionIfTriggered = "";
         public string TextToDisplayOnCompletionIfNotTriggered = "";
         public Boolean Reversible;
-        public int ORTSContinue = -1;
-        public string ORTSActSoundFile;
-        public ORTSActSoundFileTypes ORTSActSoundFileType;
-        public ORTSWeatherChange ORTSWeatherChange;
+        public int ORNPContinue = -1;
+        public string ORNPActSoundFile;
+        public ORNPActSoundFileTypes ORNPActSoundFileType;
+        public ORNPWeatherChange ORNPWeatherChange;
         public string TrainService = "";
         public int TrainStartingTime = -1;
 
@@ -925,25 +925,25 @@ namespace Ornp.Formats.Msts
                     RadiusM = stf.ReadFloat(STFReader.UNITS.Distance, null);
                     stf.MustMatch(")");
                 }),
-                new STFReader.TokenProcessor("ortscontinue", ()=>{ ORTSContinue = stf.ReadIntBlock(0); }),
+                new STFReader.TokenProcessor("ortscontinue", ()=>{ ORNPContinue = stf.ReadIntBlock(0); }),
                 new STFReader.TokenProcessor("ortsactsoundfile", ()=>
                 {
                     stf.MustMatch("(");
                     var tempString = stf.ReadString();
-                    ORTSActSoundFile =Path.Combine(Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(fileName)), "SOUND"), tempString);
+                    ORNPActSoundFile =Path.Combine(Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(fileName)), "SOUND"), tempString);
                     try
                     {
-                    ORTSActSoundFileType = (ORTSActSoundFileTypes)Enum.Parse(typeof(ORTSActSoundFileTypes), stf.ReadString());
+                    ORNPActSoundFileType = (ORNPActSoundFileTypes)Enum.Parse(typeof(ORNPActSoundFileTypes), stf.ReadString());
                     }
                     catch(ArgumentException)
                     {
                         stf.StepBackOneItem();
                         STFException.TraceInformation(stf, "Skipped unknown activity sound file type " + stf.ReadString());
-                        ORTSActSoundFileType = ORTSActSoundFileTypes.None;
+                        ORNPActSoundFileType = ORNPActSoundFileTypes.None;
                     }
                     stf.MustMatch(")");
                 }),
-                new STFReader.TokenProcessor("ortsweatherchange", ()=>{ ORTSWeatherChange = new ORTSWeatherChange(stf);}),
+                new STFReader.TokenProcessor("ortsweatherchange", ()=>{ ORNPWeatherChange = new ORNPWeatherChange(stf);}),
             });
         }
 
@@ -1001,21 +1001,21 @@ namespace Ornp.Formats.Msts
                 new STFReader.TokenProcessor("reversable_event", ()=>{ stf.MustMatch("("); stf.MustMatch(")"); Reversible = true; }),
                 // Also support the correct spelling !
                 new STFReader.TokenProcessor("reversible_event", ()=>{ stf.MustMatch("("); stf.MustMatch(")"); Reversible = true; }),
-                new STFReader.TokenProcessor("ortscontinue", ()=>{ ORTSContinue = stf.ReadIntBlock(0); }),
+                new STFReader.TokenProcessor("ortscontinue", ()=>{ ORNPContinue = stf.ReadIntBlock(0); }),
                 new STFReader.TokenProcessor("ortsactsoundfile", ()=>
                 {
                     stf.MustMatch("(");
                     var tempString = stf.ReadString();
-                    ORTSActSoundFile =Path.Combine(Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(fileName)), "SOUND"), tempString);
+                    ORNPActSoundFile =Path.Combine(Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(fileName)), "SOUND"), tempString);
                     try
                     {
-                    ORTSActSoundFileType = (ORTSActSoundFileTypes)Enum.Parse(typeof(ORTSActSoundFileTypes), stf.ReadString());
+                    ORNPActSoundFileType = (ORNPActSoundFileTypes)Enum.Parse(typeof(ORNPActSoundFileTypes), stf.ReadString());
                     }
                     catch(ArgumentException)
                     {
                         stf.StepBackOneItem();
                         STFException.TraceInformation(stf, "Skipped unknown activity sound file type " + stf.ReadString());
-                        ORTSActSoundFileType = ORTSActSoundFileTypes.None;
+                        ORNPActSoundFileType = ORNPActSoundFileTypes.None;
                     }
                     stf.MustMatch(")");
                 }),
@@ -1088,25 +1088,25 @@ namespace Ornp.Formats.Msts
                 new STFReader.TokenProcessor("texttodisplayoncompletionifnottriggered", ()=>{ TextToDisplayOnCompletionIfNotTriggered = stf.ReadStringBlock(""); }),
                 new STFReader.TokenProcessor("name", ()=>{ Name = stf.ReadStringBlock(""); }),
                 new STFReader.TokenProcessor("time", ()=>{ Time = (int)stf.ReadFloatBlock(STFReader.UNITS.Time, null); }),
-                new STFReader.TokenProcessor("ortscontinue", ()=>{ ORTSContinue = stf.ReadIntBlock(0); }),
+                new STFReader.TokenProcessor("ortscontinue", ()=>{ ORNPContinue = stf.ReadIntBlock(0); }),
                 new STFReader.TokenProcessor("ortsactsoundfile", ()=>
                 {
                     stf.MustMatch("(");
                     var tempString = stf.ReadString();
-                    ORTSActSoundFile = Path.Combine(Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(fileName)), "SOUND"), tempString);
+                    ORNPActSoundFile = Path.Combine(Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(fileName)), "SOUND"), tempString);
                     try
                     {
-                    ORTSActSoundFileType = (ORTSActSoundFileTypes)Enum.Parse(typeof(ORTSActSoundFileTypes), stf.ReadString());
+                    ORNPActSoundFileType = (ORNPActSoundFileTypes)Enum.Parse(typeof(ORNPActSoundFileTypes), stf.ReadString());
                     }
                     catch(ArgumentException)
                     {
                         stf.StepBackOneItem();
                         STFException.TraceInformation(stf, "Skipped unknown activity sound file type " + stf.ReadString());
-                        ORTSActSoundFileType = ORTSActSoundFileTypes.None;
+                        ORNPActSoundFileType = ORNPActSoundFileTypes.None;
                     }
                     stf.MustMatch(")");
                 }),
-                new STFReader.TokenProcessor("ortsweatherchange", ()=>{ ORTSWeatherChange = new ORTSWeatherChange(stf);}),
+                new STFReader.TokenProcessor("ortsweatherchange", ()=>{ ORNPWeatherChange = new ORNPWeatherChange(stf);}),
             });
         }
     }
@@ -1123,7 +1123,7 @@ namespace Ornp.Formats.Msts
         public string DisplayMessage;
         //       public string WaitingTrainToRestart;
         public RestartWaitingTrain RestartWaitingTrain;
-        public ORTSWeatherChange ORTSWeatherChange;
+        public ORNPWeatherChange ORNPWeatherChange;
         public ActivitySound ActivitySound;
 
         public Outcomes(STFReader stf, string fileName)
@@ -1145,7 +1145,7 @@ namespace Ornp.Formats.Msts
                     DisplayMessage = stf.ReadStringBlock(""); }),
  //               new STFReader.TokenProcessor("ortswaitingtraintorestart", ()=>{ WaitingTrainToRestart = stf.ReadStringBlock(""); }),
                 new STFReader.TokenProcessor("ortsrestartwaitingtrain", ()=>{ RestartWaitingTrain = new RestartWaitingTrain(stf); }),
-                new STFReader.TokenProcessor("ortsweatherchange", ()=>{ ORTSWeatherChange = new ORTSWeatherChange(stf);}),
+                new STFReader.TokenProcessor("ortsweatherchange", ()=>{ ORNPWeatherChange = new ORNPWeatherChange(stf);}),
                 new STFReader.TokenProcessor("ortsactivitysound", ()=>{ ActivitySound = new ActivitySound(stf, fileName);}),
             });
         }
@@ -1178,7 +1178,7 @@ namespace Ornp.Formats.Msts
 
     }
 
-    public class ORTSWeatherChange
+    public class ORNPWeatherChange
     {
         public float ORTSOvercast = -1;
         public int ORTSOvercastTransitionTimeS = -1;
@@ -1189,7 +1189,7 @@ namespace Ornp.Formats.Msts
         public float ORTSPrecipitationLiquidity = -1;
         public int ORTSPrecipitationLiquidityTransitionTimeS = -1;
 
-        public ORTSWeatherChange(STFReader stf)
+        public ORNPWeatherChange(STFReader stf)
         {
             stf.MustMatch("(");
             stf.ParseBlock(new STFReader.TokenProcessor[] {
@@ -1227,8 +1227,8 @@ namespace Ornp.Formats.Msts
 
     public class ActivitySound
     {
-        public string ORTSActSoundFile;
-        public ORTSActSoundFileTypes ORTSActSoundFileType;
+        public string ORNPActSoundFile;
+        public ORNPActSoundFileTypes ORNPActSoundFileType;
         public int TileX;
         public int TileZ;
         public float X;
@@ -1242,16 +1242,16 @@ namespace Ornp.Formats.Msts
                 {
                     stf.MustMatch("(");
                     var tempString = stf.ReadString();
-                    ORTSActSoundFile =Path.Combine(Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(fileName)), "SOUND"), tempString);
+                    ORNPActSoundFile =Path.Combine(Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(fileName)), "SOUND"), tempString);
                     try
                     {
-                    ORTSActSoundFileType = (ORTSActSoundFileTypes)Enum.Parse(typeof(ORTSActSoundFileTypes), stf.ReadString());
+                    ORNPActSoundFileType = (ORNPActSoundFileTypes)Enum.Parse(typeof(ORNPActSoundFileTypes), stf.ReadString());
                     }
                     catch(ArgumentException)
                     {
                         stf.StepBackOneItem();
                         STFException.TraceInformation(stf, "Skipped unknown activity sound file type " + stf.ReadString());
-                        ORTSActSoundFileType = ORTSActSoundFileTypes.None;
+                        ORNPActSoundFileType = ORNPActSoundFileTypes.None;
                     }
                     stf.MustMatch(")");
                 }),

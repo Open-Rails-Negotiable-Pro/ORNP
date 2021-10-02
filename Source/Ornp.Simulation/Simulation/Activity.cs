@@ -164,7 +164,7 @@ namespace Ornp.Simulation
                 }
                 EventWrapper eventAdded = EventList.Last();
                 eventAdded.OriginalActivationLevel = i.Activation_Level;
-                if (i.ORTSWeatherChange != null || i.Outcomes.ORTSWeatherChange != null) WeatherChangesPresent = true;
+                if (i.ORNPWeatherChange != null || i.Outcomes.ORNPWeatherChange != null) WeatherChangesPresent = true;
             }
 
             StationStopLogActive = false;
@@ -1246,12 +1246,12 @@ namespace Ornp.Simulation
 
             // Activity sound management
 
-            if (this.ParsedObject.ORTSActSoundFile != null || (this.ParsedObject.Outcomes != null && this.ParsedObject.Outcomes.ActivitySound != null))
+            if (this.ParsedObject.ORNPActSoundFile != null || (this.ParsedObject.Outcomes != null && this.ParsedObject.Outcomes.ActivitySound != null))
             {
                 if (activity.triggeredEventWrapper == null) activity.triggeredEventWrapper = this;
             }
 
-            if (this.ParsedObject.ORTSWeatherChange != null || (this.ParsedObject.Outcomes != null && this.ParsedObject.Outcomes.ORTSWeatherChange != null))
+            if (this.ParsedObject.ORNPWeatherChange != null || (this.ParsedObject.Outcomes != null && this.ParsedObject.Outcomes.ORNPWeatherChange != null))
             {
                 if (activity.triggeredEventWrapper == null) activity.triggeredEventWrapper = this;
             }
