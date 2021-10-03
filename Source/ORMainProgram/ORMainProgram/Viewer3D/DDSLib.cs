@@ -769,7 +769,7 @@ namespace Ornp.Viewer3D
         private static byte[] mipData;
 #else
 
-        static DDSLib()
+/*        static DDSLib()
         {
             mipDataSet = new Dictionary<int, byte[]>();
         }
@@ -802,6 +802,7 @@ namespace Ornp.Viewer3D
                 }
             }
         }
+*/
 #endif
 
         //try to evaluate the xna compatible surface for the present data

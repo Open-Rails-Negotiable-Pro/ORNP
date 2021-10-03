@@ -8,6 +8,7 @@
     <Platforms>x86;x64;arm64</Platforms>
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <UseWinUI>true</UseWinUI>
+    <StartupObject>Ornp.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,11 +45,14 @@
 
   <ItemGroup>
     <Folder Include="Content\ETCS\mipmap-2\" />
-    <Folder Include="Native\X64\" />
+    <Folder Include="Native\X86\" />
     <Folder Include="Processes\" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="GNU.Gettext">
+      <HintPath>..\..\..\..\openrails\Source\3rdPartyLibs\GNU.Gettext.dll</HintPath>
+    </Reference>
     <Reference Include="GNU.Gettext.WinForms">
       <HintPath>..\..\..\..\openrails\Source\3rdPartyLibs\GNU.Gettext.WinForms.dll</HintPath>
     </Reference>
