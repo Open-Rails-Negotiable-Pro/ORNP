@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows10.0.19041</TargetFramework>
+    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>ORNP</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -11,10 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Gettext.Tools" Version="0.21.0.1" />
     <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.4" />
     <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.4" />
     <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.4" />
-    <PackageReference Include="ReactiveUI" Version="16.2.6" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
@@ -23,6 +24,17 @@
     <ProjectReference Include="..\..\ORNP.Content\ORNP.Content.csproj" />
     <ProjectReference Include="..\..\Ornp.Formats.Msts\Ornp.Formats.Msts.csproj" />
     <ProjectReference Include="..\..\Ornp.Formats.OR\Ornp.Formats.OR.csproj" />
+    <ProjectReference Include="..\..\ORNP.Menu\ORNP.Menu.csproj" />
     <ProjectReference Include="..\..\ORNP.Settings\ORNP.Settings.csproj" />
+    <ProjectReference Include="..\..\ORNP.Updater\ORNP.Updater.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="GNU.Gettext">
+      <HintPath>..\..\..\..\openrails\Source\3rdPartyLibs\GNU.Gettext.dll</HintPath>
+    </Reference>
+    <Reference Include="GNU.Gettext.WinForms">
+      <HintPath>..\..\..\..\openrails\Source\3rdPartyLibs\GNU.Gettext.WinForms.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

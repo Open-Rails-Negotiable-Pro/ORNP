@@ -1048,7 +1048,7 @@ namespace Ornp.Formats.OR
         public List<AESignalHead> SignalHeads = new List<AESignalHead>();
 
         public int SignalNumClearAhead_MSTS = -2;    // Overall maximum SignalNumClearAhead over all heads (MSTS calculation)
-        public int SignalNumClearAhead_ORTS = -2;    // Overall maximum SignalNumClearAhead over all heads (ORTS calculation)
+        public int SignalNumClearAhead_ORNP = -2;    // Overall maximum SignalNumClearAhead over all heads (ORTS calculation)
         public int SignalNumNormalHeads;             // no. of normal signal heads in signal
         public int ReqNumClearAhead;                 // Passed on value for SignalNumClearAhead
 
@@ -1147,7 +1147,7 @@ namespace Ornp.Formats.OR
             direction = copy.direction;
             isSignal = copy.isSignal;
             SignalNumClearAhead_MSTS = copy.SignalNumClearAhead_MSTS;
-            SignalNumClearAhead_ORTS = copy.SignalNumClearAhead_ORTS;
+            SignalNumClearAhead_ORNP = copy.SignalNumClearAhead_ORNP;
             SignalNumNormalHeads = copy.SignalNumNormalHeads;
 
             draw_state = copy.draw_state;
@@ -1767,7 +1767,7 @@ namespace Ornp.Formats.OR
                 if (sigFunction == MstsSignalFunction.NORMAL)
                 {
                     mainSignal.SignalNumClearAhead_MSTS = Math.Max(mainSignal.SignalNumClearAhead_MSTS, signalType.NumClearAhead_MSTS);
-                    mainSignal.SignalNumClearAhead_ORTS = Math.Max(mainSignal.SignalNumClearAhead_ORTS, signalType.NumClearAhead_ORTS);
+                    mainSignal.SignalNumClearAhead_ORNP = Math.Max(mainSignal.SignalNumClearAhead_ORNP, signalType.NumClearAhead_ORNP);
                 }
             }
             else

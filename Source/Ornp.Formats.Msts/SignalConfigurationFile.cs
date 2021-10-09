@@ -471,7 +471,7 @@ namespace Ornp.Formats.Msts
         public int NumClearAhead_MSTS { get; private set; }
         /// <summary>Number of blocks ahead which need to be cleared in order to maintain a 'clear' indication
         /// in front of a train. ORTS calculation</summary>
-        public int NumClearAhead_ORTS { get; private set; }
+        public int NumClearAhead_ORNP { get; private set; }
         /// <summary>Number of seconds to spend animating a semaphore signal.</summary>
         public float SemaphoreInfo { get; private set; }
         public ApproachControlLimits ApproachControlDetails;
@@ -577,7 +577,7 @@ namespace Ornp.Formats.Msts
 
                 // set SNCA
                 NumClearAhead_MSTS = -2;
-                NumClearAhead_ORTS = numClearAhead;
+                NumClearAhead_ORNP = numClearAhead;
             }
             else
             {
@@ -587,7 +587,7 @@ namespace Ornp.Formats.Msts
 
                 // set SNCA
                 NumClearAhead_MSTS = numdefs == 1 ? numClearAhead : -2;
-                NumClearAhead_ORTS = numdefs == 2 ? numClearAhead : -2;
+                NumClearAhead_ORNP = numdefs == 2 ? numClearAhead : -2;
             }
         }
 

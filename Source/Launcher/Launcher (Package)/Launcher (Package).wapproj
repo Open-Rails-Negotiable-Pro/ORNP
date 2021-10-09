@@ -35,7 +35,7 @@
   </PropertyGroup>
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.props" />
   <PropertyGroup>
-    <ProjectGuid>de9ea11e-14f2-4b40-91e6-5f0dfd1a8b06</ProjectGuid>
+    <ProjectGuid>701aee5b-2fe3-4d93-9779-356d16da8ef9</ProjectGuid>
     <TargetPlatformVersion>10.0.20348.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <AssetTargetFallback>net5.0-windows$(TargetPlatformVersion);$(AssetTargetFallback)</AssetTargetFallback>
@@ -64,10 +64,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.4">
+    <PackageReference Include="Microsoft.ProjectReunion" Version="[0.8.4]">
       <IncludeAssets>build</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.4">
+    <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="[0.8.4]">
       <IncludeAssets>build</IncludeAssets>
     </PackageReference>
   </ItemGroup>

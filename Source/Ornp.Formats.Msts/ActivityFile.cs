@@ -578,11 +578,11 @@ namespace Ornp.Formats.Msts
 
         private IEnumerable<STFReader.TokenProcessor> ORSpecificDataTokenProcessors(STFReader stf)
         {
-            yield return new STFReader.TokenProcessor("ortsaihornatcrossings", () =>
+            yield return new STFReader.TokenProcessor("ornpaihornatcrossings", () =>
             {
                 AIBlowsHornAtLevelCrossings = stf.ReadIntBlock(Convert.ToInt32(AIBlowsHornAtLevelCrossings)) > 0;
             });
-            yield return new STFReader.TokenProcessor("ortsaicrossinghornpattern", () =>
+            yield return new STFReader.TokenProcessor("ornpaicrossinghornpattern", () =>
             {
                 if (Enum.TryParse<LevelCrossingHornPattern>(stf.ReadStringBlock(""), ignoreCase: true, out var value))
                     AILevelCrossingHornPattern = value;
@@ -904,7 +904,7 @@ namespace Ornp.Formats.Msts
             stf.ParseBlock(new STFReader.TokenProcessor[] {
                 new STFReader.TokenProcessor("eventtypelocation", ()=>{ stf.MustMatch("("); stf.MustMatch(")"); }),
                 new STFReader.TokenProcessor("id", ()=>{ ID = stf.ReadIntBlock(null); }),
-                new STFReader.TokenProcessor("ortstriggeringtrain", ()=>{ ParseTrain(stf); }),
+                new STFReader.TokenProcessor("ornptriggeringtrain", ()=>{ ParseTrain(stf); }),
                 new STFReader.TokenProcessor("activation_level", ()=>{ Activation_Level = stf.ReadIntBlock(null); }),
                 new STFReader.TokenProcessor("outcomes", ()=>
                 {
@@ -925,8 +925,8 @@ namespace Ornp.Formats.Msts
                     RadiusM = stf.ReadFloat(STFReader.UNITS.Distance, null);
                     stf.MustMatch(")");
                 }),
-                new STFReader.TokenProcessor("ortscontinue", ()=>{ ORNPContinue = stf.ReadIntBlock(0); }),
-                new STFReader.TokenProcessor("ortsactsoundfile", ()=>
+                new STFReader.TokenProcessor("ornpcontinue", ()=>{ ORNPContinue = stf.ReadIntBlock(0); }),
+                new STFReader.TokenProcessor("ornpactsoundfile", ()=>
                 {
                     stf.MustMatch("(");
                     var tempString = stf.ReadString();
@@ -943,7 +943,7 @@ namespace Ornp.Formats.Msts
                     }
                     stf.MustMatch(")");
                 }),
-                new STFReader.TokenProcessor("ortsweatherchange", ()=>{ ORNPWeatherChange = new ORNPWeatherChange(stf);}),
+                new STFReader.TokenProcessor("ornpweatherchange", ()=>{ ORNPWeatherChange = new ORNPWeatherChange(stf);}),
             });
         }
 
@@ -1001,8 +1001,8 @@ namespace Ornp.Formats.Msts
                 new STFReader.TokenProcessor("reversable_event", ()=>{ stf.MustMatch("("); stf.MustMatch(")"); Reversible = true; }),
                 // Also support the correct spelling !
                 new STFReader.TokenProcessor("reversible_event", ()=>{ stf.MustMatch("("); stf.MustMatch(")"); Reversible = true; }),
-                new STFReader.TokenProcessor("ortscontinue", ()=>{ ORNPContinue = stf.ReadIntBlock(0); }),
-                new STFReader.TokenProcessor("ortsactsoundfile", ()=>
+                new STFReader.TokenProcessor("ornpcontinue", ()=>{ ORNPContinue = stf.ReadIntBlock(0); }),
+                new STFReader.TokenProcessor("ornpactsoundfile", ()=>
                 {
                     stf.MustMatch("(");
                     var tempString = stf.ReadString();
@@ -1088,8 +1088,8 @@ namespace Ornp.Formats.Msts
                 new STFReader.TokenProcessor("texttodisplayoncompletionifnottriggered", ()=>{ TextToDisplayOnCompletionIfNotTriggered = stf.ReadStringBlock(""); }),
                 new STFReader.TokenProcessor("name", ()=>{ Name = stf.ReadStringBlock(""); }),
                 new STFReader.TokenProcessor("time", ()=>{ Time = (int)stf.ReadFloatBlock(STFReader.UNITS.Time, null); }),
-                new STFReader.TokenProcessor("ortscontinue", ()=>{ ORNPContinue = stf.ReadIntBlock(0); }),
-                new STFReader.TokenProcessor("ortsactsoundfile", ()=>
+                new STFReader.TokenProcessor("ornpcontinue", ()=>{ ORNPContinue = stf.ReadIntBlock(0); }),
+                new STFReader.TokenProcessor("ornpactsoundfile", ()=>
                 {
                     stf.MustMatch("(");
                     var tempString = stf.ReadString();
@@ -1106,7 +1106,7 @@ namespace Ornp.Formats.Msts
                     }
                     stf.MustMatch(")");
                 }),
-                new STFReader.TokenProcessor("ortsweatherchange", ()=>{ ORNPWeatherChange = new ORNPWeatherChange(stf);}),
+                new STFReader.TokenProcessor("ornpweatherchange", ()=>{ ORNPWeatherChange = new ORNPWeatherChange(stf);}),
             });
         }
     }
@@ -1144,9 +1144,9 @@ namespace Ornp.Formats.Msts
                 new STFReader.TokenProcessor("displaymessage", ()=>{
                     DisplayMessage = stf.ReadStringBlock(""); }),
  //               new STFReader.TokenProcessor("ortswaitingtraintorestart", ()=>{ WaitingTrainToRestart = stf.ReadStringBlock(""); }),
-                new STFReader.TokenProcessor("ortsrestartwaitingtrain", ()=>{ RestartWaitingTrain = new RestartWaitingTrain(stf); }),
-                new STFReader.TokenProcessor("ortsweatherchange", ()=>{ ORNPWeatherChange = new ORNPWeatherChange(stf);}),
-                new STFReader.TokenProcessor("ortsactivitysound", ()=>{ ActivitySound = new ActivitySound(stf, fileName);}),
+                new STFReader.TokenProcessor("ornprestartwaitingtrain", ()=>{ RestartWaitingTrain = new RestartWaitingTrain(stf); }),
+                new STFReader.TokenProcessor("ornpweatherchange", ()=>{ ORNPWeatherChange = new ORNPWeatherChange(stf);}),
+                new STFReader.TokenProcessor("ornpactivitysound", ()=>{ ActivitySound = new ActivitySound(stf, fileName);}),
             });
         }
     }
@@ -1162,9 +1162,9 @@ namespace Ornp.Formats.Msts
         {
             stf.MustMatch("(");
             stf.ParseBlock(new STFReader.TokenProcessor[] {
-                new STFReader.TokenProcessor("ortswaitingtraintorestart", ()=>{ ParseTrain(stf); }),
-                new STFReader.TokenProcessor("ortsdelaytorestart", ()=>{ DelayToRestart = stf.ReadIntBlock(null); }),
-                new STFReader.TokenProcessor("ortsmatchingwpdelay", ()=>{ MatchingWPDelay = stf.ReadIntBlock(null); }),
+                new STFReader.TokenProcessor("ornpwaitingtraintorestart", ()=>{ ParseTrain(stf); }),
+                new STFReader.TokenProcessor("ornpdelaytorestart", ()=>{ DelayToRestart = stf.ReadIntBlock(null); }),
+                new STFReader.TokenProcessor("ornpmatchingwpdelay", ()=>{ MatchingWPDelay = stf.ReadIntBlock(null); }),
             });
         }
 
@@ -1180,45 +1180,45 @@ namespace Ornp.Formats.Msts
 
     public class ORNPWeatherChange
     {
-        public float ORTSOvercast = -1;
-        public int ORTSOvercastTransitionTimeS = -1;
-        public float ORTSFog = -1;
-        public int ORTSFogTransitionTimeS = -1;
-        public float ORTSPrecipitationIntensity = -1;
-        public int ORTSPrecipitationIntensityTransitionTimeS = -1;
-        public float ORTSPrecipitationLiquidity = -1;
-        public int ORTSPrecipitationLiquidityTransitionTimeS = -1;
+        public float ORNPOvercast = -1;
+        public int ORNPOvercastTransitionTimeS = -1;
+        public float ORNPFog = -1;
+        public int ORNPFogTransitionTimeS = -1;
+        public float ORNPPrecipitationIntensity = -1;
+        public int ORNPPrecipitationIntensityTransitionTimeS = -1;
+        public float ORNPPrecipitationLiquidity = -1;
+        public int ORNPPrecipitationLiquidityTransitionTimeS = -1;
 
         public ORNPWeatherChange(STFReader stf)
         {
             stf.MustMatch("(");
             stf.ParseBlock(new STFReader.TokenProcessor[] {
-                new STFReader.TokenProcessor("ortsovercast", ()=>
+                new STFReader.TokenProcessor("ornpovercast", ()=>
                 {
                     stf.MustMatch("(");
-                    ORTSOvercast = stf.ReadFloat(0, -1);
-                    ORTSOvercastTransitionTimeS = stf.ReadInt(-1);
+                    ORNPOvercast = stf.ReadFloat(0, -1);
+                    ORNPOvercastTransitionTimeS = stf.ReadInt(-1);
                     stf.MustMatch(")");
                 }),
-                new STFReader.TokenProcessor("ortsfog", ()=>
+                new STFReader.TokenProcessor("ornpfog", ()=>
                 {
                     stf.MustMatch("(");
-                    ORTSFog = stf.ReadFloat(0, -1);
-                    ORTSFogTransitionTimeS = stf.ReadInt(-1);
+                    ORNPFog = stf.ReadFloat(0, -1);
+                    ORNPFogTransitionTimeS = stf.ReadInt(-1);
                     stf.MustMatch(")");
                 }),
-                new STFReader.TokenProcessor("ortsprecipitationintensity", ()=>
+                new STFReader.TokenProcessor("ornpprecipitationintensity", ()=>
                 {
                     stf.MustMatch("(");
-                    ORTSPrecipitationIntensity = stf.ReadFloat(0, -1);
-                    ORTSPrecipitationIntensityTransitionTimeS = stf.ReadInt(-1);
+                    ORNPPrecipitationIntensity = stf.ReadFloat(0, -1);
+                    ORNPPrecipitationIntensityTransitionTimeS = stf.ReadInt(-1);
                     stf.MustMatch(")");
                 }),
-                               new STFReader.TokenProcessor("ortsprecipitationliquidity", ()=>
+                               new STFReader.TokenProcessor("ornpprecipitationliquidity", ()=>
                 {
                     stf.MustMatch("(");
-                    ORTSPrecipitationLiquidity = stf.ReadFloat(0, -1);
-                    ORTSPrecipitationLiquidityTransitionTimeS = stf.ReadInt(-1);
+                    ORNPPrecipitationLiquidity = stf.ReadFloat(0, -1);
+                    ORNPPrecipitationLiquidityTransitionTimeS = stf.ReadInt(-1);
                     stf.MustMatch(")");
                 })
             });
@@ -1238,7 +1238,7 @@ namespace Ornp.Formats.Msts
         {
             stf.MustMatch("(");
             stf.ParseBlock(new STFReader.TokenProcessor[] {
-                new STFReader.TokenProcessor("ortsactsoundfile", ()=>
+                new STFReader.TokenProcessor("ornpactsoundfile", ()=>
                 {
                     stf.MustMatch("(");
                     var tempString = stf.ReadString();
@@ -1255,7 +1255,7 @@ namespace Ornp.Formats.Msts
                     }
                     stf.MustMatch(")");
                 }),
-            new STFReader.TokenProcessor("ortssoundlocation", ()=>{
+            new STFReader.TokenProcessor("ornpsoundlocation", ()=>{
                     stf.MustMatch("(");
                     TileX = stf.ReadInt(null);
                     TileZ = stf.ReadInt(null);
